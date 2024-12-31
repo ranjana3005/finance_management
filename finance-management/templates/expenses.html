@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>Expenses</header>
+    <div class="sidebar">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/balances">Balances</a>
+        <a href="/transactions">Transactions</a>
+        <a href="/bills">Bills</a>
+        <a href="/expenses">Expenses</a>
+        <a href="/goals">Goals</a>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="main">
+        <h1>Credits vs. Debits</h1>
+        <canvas id="expensesChart" width="400" height="200"></canvas>
+        <script>
+            const ctx = document.getElementById('expensesChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Credits', 'Debits'],
+                    datasets: [{
+                        label: 'Amount (₹)',
+                        data: [{{ credits }}, {{ debits }}],
+                        backgroundColor: ['#4CAF50', '#FF5733'],
+                        borderColor: ['#388E3C', '#C0392B'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>

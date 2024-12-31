@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Balances</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+</head>
+<body>
+    <header>Balances</header>
+    <div class="sidebar">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/balances">Balances</a>
+        <a href="/transactions">Transactions</a>
+        <a href="/bills">Bills</a>
+        <a href="/expenses">Expenses</a>
+        <a href="/goals">Goals</a>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="main">
+        <form method="POST" class="mt-4">
+            <div class="form-group">
+                <label for="card_number">Card Number</label>
+                <input type="text" name="card_number" id="card_number" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="card_name">Card Name</label>
+                <input type="text" name="card_name" id="card_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="expiry_date">Expiry Date (MM/YY)</label>
+                <input type="text" name="expiry_date" id="expiry_date" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input type="text" name="cvv" id="cvv" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="number" name="amount" id="amount" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Account</button>
+        </form>
+        <h2>Your Accounts</h2>
+        <table>
+            <tr>
+                <th>Card Number</th>
+                <th>Card Name</th>
+                <th>Expiry Date</th>
+                <th>CVV</th>
+                <th>Balance</th>
+            </tr>
+            {% for account in accounts %}
+                <tr>
+                    <td>{{ account.card_number }}</td>
+                    <td>{{ account.card_name }}</td>
+                    <td>{{ account.expiry_date }}</td>
+                    <td>{{ account.cvv }}</td>
+                    <td>{{ account.balance }}</td>
+                </tr>
+                {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

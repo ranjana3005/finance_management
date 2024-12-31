@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <title>Goals</title>
+</head>
+<body>
+    <header>Goals Management</header>
+    <div class="sidebar">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/balances">Balances</a>
+        <a href="/transactions">Transactions</a>
+        <a href="/bills">Bills</a>
+        <a href="/expenses">Expenses</a>
+        <a href="/goals">Goals</a>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="main">
+    <h1>Set Your Financial Goals</h1>
+    <form method="POST">
+        <label for="goal_name">Goal Name:</label>
+        <input type="text" id="goal_name" name="goal_name" required>
+        
+        <label for="target_amount">Target Amount:</label>
+        <input type="number" id="target_amount" name="target_amount" step="0.01" required>
+        
+        <button type="submit">Add Goal</button>
+    </form>
+    <hr>
+    <h2>Your Goals</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Goal Name</th>
+                <th>Target Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for goal in goals %}
+            <tr>
+                <td>{{ goal.goal_name }}</td>
+                <td>{{ goal.target_amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

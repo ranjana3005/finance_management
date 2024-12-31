@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <title>Bills</title>
+</head>
+<body>
+    <header>Bills Management</header>
+    <div class="sidebar">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/balances">Balances</a>
+        <a href="/transactions">Transactions</a>
+        <a href="/bills">Bills</a>
+        <a href="/expenses">Expenses</a>
+        <a href="/goals">Goals</a>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="main">
+        <h1>Manage Your Bills</h1>
+        <form method="POST">
+            <label for="name">Bill Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="description">Item Description:</label>
+            <input type="text" id="description" name="description" required>
+            <label for="due_date">Due Date:</label>
+            <input type="date" id="due_date" name="due_date" required>
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" step="0.01" required>
+            <button type="submit">Add Bill</button>
+        </form>
+
+        <!-- Alert for due bills -->
+        {% if due_alerts %}
+            <div class="alert alert-danger">
+                <strong>Alert:</strong> You have overdue bills!
+            </div>
+        {% endif %}
+        
+        <h2>Upcoming Bills</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Bill Name</th>
+                    <th>Description</th>
+                    <th>Due Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Pay Bill</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bill in bills %}
+                <tr>
+                    <td>{{ bill.name }}</td>
+                    <td>{{ bill.description }}</td>
+                    <td>{{ bill.due_date }}</td>
+                    <td>₹{{ bill.amount }}</td>
+                    <td>
+                        {% if bill.paid %}
+                            Paid
+                        {% else %}
+                            Unpaid
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not bill.paid %}
+                            <form method="POST" action="{{ url_for('pay_bill', bill_id=bill.id) }}">
+                                <label for="account">Select Account:</label>
+                                <select name="account" required>
+                                    {% for account in accounts %}
+                                    <option value="{{ account.id }}">{{ account.card_name }} - ₹{{ account.balance }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit">Pay</button>
+                            </form>
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

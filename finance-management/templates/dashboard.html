@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-left">Dashboard</div>
+        <div class="header-right">
+            <button class="notifications-bell">
+                {% if achieved_goals %}
+                <span class="notification-count">{{ achieved_goals | length }}</span>
+                {% endif %}
+            </button>
+        </div>
+    </header>
+    <div class="sidebar">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/balances">Balances</a>
+        <a href="/transactions">Transactions</a>
+        <a href="/bills">Bills</a>
+        <a href="/expenses">Expenses</a>
+        <a href="/goals">Goals</a>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="main">
+        <h1>Welcome, {{ username }}!</h1>
+        <p>Manage your personal finances effectively.</p>
+    <div>
+        <ul>
+            {% for goal in achieved_goals %}
+            <li>{{ goal.goal_name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div>
+        <button id="notification-btn">Show Notifications</button>
+        <ul id="notifications-list" style="display: none;">
+            {% for notification in notifications %}
+            <li>{{ notification.goal_name }} target achieved!</li>
+            {% endfor %}
+        </ul>
+        <!-- Total Account Balance -->
+        <section class="card">
+            <h2>Total Account Balance</h2>
+            <p>₹{{ total_balance }}</p>
+        </section>
+
+        <!-- Last Five Transactions -->
+        <section class="card">
+            <h2>Last Five Transactions</h2>
+            <table>
+                <tr>
+                    <th>Item</th>
+                    <th>Account</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                </tr>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.item }}</td>
+                    <td>{{ transaction.account_name }}</td>
+                    <td>{{ transaction.date_of_payment }}</td>
+                    <td>{{ transaction.payment_type }}</td>
+                    <td>₹{{ transaction.amount }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+
+        <!-- Pending Bills -->
+        <section class="card">
+            <h2>Pending Bills</h2>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Due Date</th>
+                    <th>Amount</th>
+                </tr>
+                {% for bill in pending_bills %}
+                <tr>
+                    <td>{{ bill.name }}</td>
+                    <td>{{ bill.due_date }}</td>
+                    <td>₹{{ bill.amount }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+
+        <!-- Expense Graph -->
+        <section class="card">
+            <h2>Expense Graph</h2>
+            <canvas id="expenseChart"></canvas>
+        </section>
+    </div>
+    <script>
+        document.getElementById('notification-btn').onclick = function () {
+            var list = document.getElementById('notifications-list');
+            list.style.display = list.style.display === 'none' ? 'block' : 'none';
+        };
+    </script>
+    <script>
+        const ctx = document.getElementById('expenseChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Credits', 'Debits'],
+                datasets: [{
+                    data: [{{ credits }}, {{ debits }}],
+                    backgroundColor: ['#4CAF50', '#F44336']
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
